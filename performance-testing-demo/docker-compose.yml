@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - '8000:8000'
+    networks:
+      - perf-net
+
+  locust:
+    image: locustio/locust:2.19.0
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locustfile.py --host http://web:8000
+    ports:
+      - '8089:8089'
+    networks:
+      - perf-net
+
+networks:
+  perf-net:
+    driver: bridge
